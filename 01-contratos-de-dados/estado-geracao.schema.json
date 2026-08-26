@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://webfy.internal/schemas/estado-geracao.schema.json",
+  "title": "Estado de geração do manual de marca",
+  "description": "Equivalente por lead do .agent/state.json da BNP: rastreia progresso do pipeline pra UM negócio/lead, não pra uma task de projeto. Um registro por lead_id. Ver 00-arquitetura/META-ARQUIVOS.md.",
+  "type": "object",
+  "required": ["lead_id", "estagio_atual", "atualizado_em", "confianca_por_modulo", "status_entrega"],
+  "additionalProperties": false,
+  "properties": {
+    "lead_id": { "type": "string" },
+    "estagio_atual": {
+      "type": "string",
+      "enum": [
+        "aguardando_sinais",
+        "sinais_coletados",
+        "descoberta_automatica_em_curso",
+        "sistema_visual_em_curso",
+        "logo_em_curso",
+        "compondo_manual",
+        "em_revisao_qualidade",
+        "pronto",
+        "enviado_ao_vendedor",
+        "entregue_ao_cliente",
+        "falhou"
+      ]
+    },
+    "iniciado_em": { "type": ["string", "null"], "format": "date-time" },
+    "atualizado_em": { "type": "string", "format": "date-time" },
+    "concluido_em": { "type": ["string", "null"], "format": "date-time" },
+    "versao_manual_atual": { "type": "integer", "minimum": 0, "description": "0 = nenhuma versão gerada ainda. Incrementa a cada regeração (ex: troca de logo, nova micro-conversa preenchendo lacuna)." },
+    "confianca_por_modulo": {
+      "type": "object",
+      "description": "Espelha o array identidade.modulos do manual, mas em formato de lookup rápido pra UI de progresso.",
+      "properties": {
+        "proposito": { "type": "string", "enum": ["alto", "medio", "baixo", "ausente", "nao_processado"] },
+        "posicionamento": { "type": "string", "enum": ["alto", "medio", "baixo", "ausente", "nao_processado"] },
+        "publico_e_nicho": { "type": "string", "enum": ["alto", "medio", "baixo", "ausente", "nao_processado"] },
+        "personalidade": { "type": "string", "enum": ["alto", "medio", "baixo", "ausente", "nao_processado"] },
+        "voz_e_tom": { "type": "string", "enum": ["alto", "medio", "baixo", "ausente", "nao_processado"] },
+        "narrativa": { "type": "string", "enum": ["alto", "medio", "baixo", "ausente", "nao_processado"] },
+        "tensao_do_fundador": { "type": "string", "enum": ["alto", "medio", "baixo", "ausente", "nao_processado"] },
+        "sintese": { "type": "string", "enum": ["alto", "medio", "baixo", "ausente", "nao_processado"] }
+      },
+      "additionalProperties": false
+    },
+    "logo_existente_detectado": { "type": "boolean" },
+    "lacunas_abertas_count": { "type": "integer", "minimum": 0 },
+    "gate_qualidade_ultimo_veredito": { "type": ["string", "null"], "enum": ["aprovado", "aprovado_com_ressalvas", "reprovado", null] },
+    "tentativas_geracao": { "type": "integer", "minimum": 0, "description": "Conta regenerações completas do pipeline (não regeração pontual de logo)." },
+    "erro": {
+      "type": ["object", "null"],
+      "properties": {
+        "etapa": { "type": "string" },
+        "mensagem": { "type": "string" },
+        "ocorrido_em": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": false
+    },
+    "status_entrega": {
+      "type": "string",
+      "enum": ["nao_enviado", "link_gerado", "pdf_exportado", "enviado_pelo_vendedor", "visualizado_pelo_dono"],
+      "description": "Rastreado separado do estágio do pipeline — um manual 'pronto' pode ficar 'nao_enviado' por tempo indefinido até o vendedor agir."
+    },
+    "link_publico": { "type": ["string", "null"], "format": "uri" },
+    "historico_estagios": {
+      "type": "array",
+      "description": "Trilha de auditoria simples — um registro por transição de estágio.",
+      "items": {
+        "type": "object",
+        "required": ["estagio", "em"],
+        "properties": {
+          "estagio": { "type": "string" },
+          "em": { "type": "string", "format": "date-time" }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

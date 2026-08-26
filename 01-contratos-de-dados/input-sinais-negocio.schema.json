@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://webfy.internal/schemas/input-sinais-negocio.schema.json",
+  "title": "Sinais do negócio (input do pipeline de manual de marca)",
+  "description": "Tudo que a plataforma webfy já coletou sobre um negócio local ao encontrá-lo sem site. É o único input aceito pelo pipeline — nenhum agente pode inferir a partir de fonte não listada aqui.",
+  "type": "object",
+  "required": ["lead_id", "nome_negocio", "categoria", "coletado_em"],
+  "additionalProperties": false,
+  "properties": {
+    "lead_id": {
+      "type": "string",
+      "description": "ID único do lead/negócio no CRM da webfy. Chave de isolamento — nenhum dado com lead_id diferente pode entrar num mesmo processamento."
+    },
+    "nome_negocio": { "type": "string", "minLength": 1 },
+    "categoria": {
+      "type": "string",
+      "description": "Categoria/nicho conforme classificado pela varredura (ex: 'padaria', 'barbearia', 'clínica odontológica')."
+    },
+    "subcategoria": { "type": ["string", "null"] },
+    "endereco": {
+      "type": "object",
+      "properties": {
+        "logradouro": { "type": ["string", "null"] },
+        "bairro": { "type": ["string", "null"] },
+        "cidade": { "type": ["string", "null"] },
+        "estado": { "type": ["string", "null"] },
+        "pais": { "type": "string", "default": "BR" }
+      },
+      "additionalProperties": false
+    },
+    "google_business_profile": {
+      "type": ["object", "null"],
+      "description": "Sinais extraídos do GBP, se o negócio tiver perfil.",
+      "properties": {
+        "descricao": { "type": ["string", "null"] },
+        "categoria_gbp": { "type": ["string", "null"] },
+        "nota_media": { "type": ["number", "null"], "minimum": 0, "maximum": 5 },
+        "total_avaliacoes": { "type": ["integer", "null"], "minimum": 0 },
+        "horario_funcionamento": { "type": ["string", "null"] },
+        "reviews_amostra": {
+          "type": "array",
+          "description": "Amostra de reviews de clientes reais (texto), usada como sinal de percepção/tom.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "texto": { "type": "string" },
+              "nota": { "type": ["number", "null"] }
+            },
+            "required": ["texto"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "fotos": {
+      "type": "array",
+      "description": "Fotos públicas encontradas (GBP, site antigo, redes sociais).",
+      "items": {
+        "type": "object",
+        "required": ["url", "fonte"],
+        "properties": {
+          "url": { "type": "string", "format": "uri" },
+          "fonte": { "type": "string", "enum": ["gbp", "site_antigo", "instagram", "facebook", "outro"] },
+          "e_provavel_logo": {
+            "type": "boolean",
+            "default": false,
+            "description": "Marcado true quando a foto foi identificada como logo (perfil de rede social, favicon de site antigo, etc.) — sinal de entrada pro agent-06-logo-guardiao."
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "logo_url": {
+      "type": ["string", "null"],
+      "format": "uri",
+      "description": "URL do candidato mais confiável a logo existente, se houver (normalmente a foto de perfil da rede social mais ativa, ou o favicon/header do site antigo). Null se nenhum sinal de logo foi encontrado."
+    },
+    "site_antigo_url": { "type": ["string", "null"], "format": "uri" },
+    "site_antigo_conteudo_extraido": {
+      "type": ["string", "null"],
+      "description": "Texto bruto extraído do site antigo (sobre, serviços, headline), se existir."
+    },
+    "redes_sociais": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["plataforma", "url"],
+        "properties": {
+          "plataforma": { "type": "string", "enum": ["instagram", "facebook", "tiktok", "linkedin", "outro"] },
+          "url": { "type": "string", "format": "uri" },
+          "bio": { "type": ["string", "null"] },
+          "seguidores": { "type": ["integer", "null"], "minimum": 0 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "coletado_em": { "type": "string", "format": "date-time" },
+    "fonte_coleta": {
+      "type": "string",
+      "description": "Identificador do processo/varredura que coletou os sinais (versão do scraper, etc.), pra rastreabilidade."
+    }
+  }
+}

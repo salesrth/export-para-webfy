@@ -1,0 +1,208 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://webfy.internal/schemas/output-manual-marca.schema.json",
+  "title": "Manual de marca gerado (output do pipeline)",
+  "description": "Estrutura final do manual de marca por negócio. Todo campo com racional causal segue o padrão mecanismo → percepção → aplicação → recomendação (ver 02-agentes/agent-10-explicador-didatico.md). Campo sem sinal suficiente vira lacuna explícita — nunca é omitido silenciosamente.",
+  "type": "object",
+  "required": ["lead_id", "versao", "gerado_em", "identidade", "paleta", "tipografia", "logo", "lacunas_abertas"],
+  "additionalProperties": false,
+  "properties": {
+    "lead_id": { "type": "string" },
+    "versao": { "type": "integer", "minimum": 1, "description": "Incrementa a cada regeração." },
+    "gerado_em": { "type": "string", "format": "date-time" },
+    "identidade": {
+      "type": "object",
+      "description": "Saída sintetizada dos módulos de descoberta automática (agent-02) e posicionamento (agent-03).",
+      "required": ["modulos"],
+      "properties": {
+        "nome_negocio": { "type": "string" },
+        "modulos": {
+          "type": "array",
+          "description": "Os 8 módulos do método de descoberta, cada um com confiança e conteúdo (ou lacuna).",
+          "items": {
+            "type": "object",
+            "required": ["modulo", "confianca"],
+            "properties": {
+              "modulo": {
+                "type": "string",
+                "enum": ["proposito", "posicionamento", "publico_e_nicho", "personalidade", "voz_e_tom", "narrativa", "tensao_do_fundador", "sintese"]
+              },
+              "confianca": { "type": "string", "enum": ["alto", "medio", "baixo", "ausente"] },
+              "conteudo": { "type": ["string", "null"] },
+              "sinais_usados": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Quais campos do input (ex: 'gbp.reviews_amostra', 'redes_sociais[0].bio') sustentam esse conteúdo. Vazio se confiança = ausente."
+              },
+              "e_lacuna": { "type": "boolean" }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "paleta": {
+      "type": "object",
+      "required": ["origem", "cores"],
+      "properties": {
+        "origem": {
+          "type": "string",
+          "enum": ["extraida_do_logo_existente", "inferida_do_posicionamento"],
+          "description": "Se há logo existente, a paleta funcional deriva dele (agent-06). Senão, deriva do posicionamento/personalidade inferidos (agent-04)."
+        },
+        "cores": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["papel", "hex", "racional"],
+            "properties": {
+              "papel": { "type": "string", "description": "Ex: 'primária', 'destaque', 'neutro-texto', 'neutro-fundo'." },
+              "hex": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+              "hover": { "type": ["string", "null"], "pattern": "^#[0-9a-fA-F]{6}$" },
+              "racional": {
+                "type": "object",
+                "required": ["mecanismo", "percepcao", "aplicacao", "recomendacao"],
+                "properties": {
+                  "mecanismo": { "type": "string" },
+                  "percepcao": { "type": "string" },
+                  "aplicacao": { "type": "string" },
+                  "recomendacao": { "type": "string" }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "tipografia": {
+      "type": "object",
+      "required": ["titulos", "corpo", "racional"],
+      "properties": {
+        "titulos": { "type": "string", "description": "Família tipográfica recomendada pra títulos." },
+        "corpo": { "type": "string", "description": "Família tipográfica recomendada pro corpo de texto." },
+        "racional": {
+          "type": "object",
+          "required": ["mecanismo", "percepcao", "aplicacao", "recomendacao"],
+          "properties": {
+            "mecanismo": { "type": "string" },
+            "percepcao": { "type": "string" },
+            "aplicacao": { "type": "string" },
+            "recomendacao": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "logo": {
+      "type": "object",
+      "required": ["tem_logo_existente"],
+      "properties": {
+        "tem_logo_existente": { "type": "boolean" },
+        "logo_existente": {
+          "type": ["object", "null"],
+          "properties": {
+            "url_original": { "type": "string", "format": "uri" },
+            "cores_dominantes_extraidas": {
+              "type": "array",
+              "items": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" }
+            },
+            "estilo_tipografico_aproximado": { "type": ["string", "null"] },
+            "nivel_qualidade": { "type": "string", "enum": ["vetorizavel", "raster_boa_resolucao", "raster_baixa_resolucao"] },
+            "regras_de_uso": {
+              "type": "object",
+              "properties": {
+                "area_protecao": { "type": "string" },
+                "tamanho_minimo": { "type": "string" },
+                "fundos_compativeis": { "type": "array", "items": { "type": "string" } },
+                "o_que_nao_fazer": { "type": "array", "items": { "type": "string" } }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "alternativas_geradas": {
+          "type": "array",
+          "description": "3 opções de logo novo — sempre presentes, com ou sem logo existente. Enquadramento muda (upsell opcional vs. opção inicial), não a geração.",
+          "minItems": 0,
+          "maxItems": 3,
+          "items": {
+            "type": "object",
+            "required": ["opcao_id", "conceito", "racional", "brief_enviado_api_imagem", "status"],
+            "properties": {
+              "opcao_id": { "type": "string" },
+              "conceito": { "type": "string" },
+              "racional": {
+                "type": "object",
+                "required": ["mecanismo", "percepcao", "aplicacao", "recomendacao"],
+                "properties": {
+                  "mecanismo": { "type": "string" },
+                  "percepcao": { "type": "string" },
+                  "aplicacao": { "type": "string" },
+                  "recomendacao": { "type": "string" }
+                },
+                "additionalProperties": false
+              },
+              "brief_enviado_api_imagem": { "type": "object", "description": "Ver 04-integracao-webfy/SERVICO-GERACAO-DE-IMAGEM.md pro formato completo." },
+              "imagem_url": { "type": ["string", "null"], "format": "uri" },
+              "status": { "type": "string", "enum": ["pendente", "gerada", "falhou"] }
+            },
+            "additionalProperties": false
+          }
+        },
+        "enquadramento": {
+          "type": "string",
+          "enum": ["upsell_opcional", "opcoes_iniciais"],
+          "description": "'upsell_opcional' quando tem_logo_existente=true; 'opcoes_iniciais' quando false."
+        }
+      },
+      "additionalProperties": false
+    },
+    "aplicacoes_recomendadas": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["contexto", "recomendacao"],
+        "properties": {
+          "contexto": { "type": "string", "enum": ["cartao_de_visita", "post_rede_social", "fachada", "uniforme", "embalagem", "outro"] },
+          "recomendacao": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "anti_padroes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Lista curta do que evitar, específica pro negócio (não genérica)."
+    },
+    "lacunas_abertas": {
+      "type": "array",
+      "description": "Todo módulo/campo com confiança baixa ou ausente aparece aqui explicitamente.",
+      "items": {
+        "type": "object",
+        "required": ["campo", "motivo"],
+        "properties": {
+          "campo": { "type": "string" },
+          "motivo": { "type": "string" },
+          "preenchivel_via": { "type": "string", "enum": ["micro_conversa_vendedor", "sinal_adicional_scraping", "nao_preenchivel_automaticamente"] }
+        },
+        "additionalProperties": false
+      }
+    },
+    "gate_qualidade": {
+      "type": "object",
+      "description": "Resultado do agent-09-revisor-qualidade nessa versão.",
+      "properties": {
+        "veredito": { "type": "string", "enum": ["aprovado", "aprovado_com_ressalvas", "reprovado"] },
+        "achados": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    }
+  }
+}

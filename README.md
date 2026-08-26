@@ -1,0 +1,71 @@
+# Export pra webfy — geração automática de manual de marca
+
+> **Isto é blueprint + schemas + prompts de agente + spec de UI. Não é
+> código pronto pra rodar.** Um dev (ou uma sessão Claude Code dentro do
+> repo do webfy) usa este pacote pra implementar a feature no stack real da
+> plataforma — este pacote não conhece esse stack e não deveria conhecer.
+
+## O que é isto
+
+A BNP desenvolveu, pra uso interno, um método de criar manual de marca
+(entrevista estruturada em 8 módulos + design system com racional causal
+por escolha visual) e um jeito de orquestrar agentes de IA especializados
+pra produzir e auditar esse conteúdo. Este pacote adapta esse método pra
+rodar **sem entrevista humana**, em escala, dentro de outra plataforma
+("webfy"): uma plataforma que já varre a web achando negócios locais sem
+site, gera site automático pra eles, e vende esse site através de um
+vendedor. A adição aqui é uma aba nova que gera automaticamente um manual
+de marca completo pra cada negócio encontrado, como argumento extra de
+venda.
+
+## Pra quem serve
+
+Dev do webfy que vai implementar a feature, ou uma sessão de IA de
+desenvolvimento trabalhando dentro do repo do webfy com acesso ao stack
+real da plataforma.
+
+## Como navegar o pacote
+
+- **`CHRONOLOGIA.md`** — o documento central. Passo a passo cronológico
+  completo, do lead sem site até o manual entregue, com agente/tempo/
+  bifurcação lógica-de-logo em cada passo, e um diagrama do fluxo inteiro.
+  Comece por aqui pra entender o todo antes de mergulhar nas peças.
+- **`00-arquitetura/`** — como os 10 agentes se orquestram entre si (ordem,
+  paralelismo, gates de qualidade) e como funciona o meta-arquivo de estado
+  por lead (equivalente ao `.agent/state.json` da BNP, mas por negócio em
+  vez de por task de projeto).
+- **`01-contratos-de-dados/`** — os 3 JSON Schemas que definem exatamente o
+  que entra (sinais coletados do negócio), o que sai (manual de marca
+  gerado) e como o progresso é rastreado (estado de geração por lead).
+- **`02-agentes/`** — os 10 prompts de agente, um arquivo por agente, no
+  formato exato do padrão `.claude/agents/*.md` da BNP (frontmatter +
+  tags `<role>`/`<execution>`/`<output_format>`/`<constraints>`). Cobrem
+  desde a ingestão de sinais até o gate final de qualidade — com atenção
+  especial aos agentes 06 e 07, que resolvem a lógica central de "o negócio
+  já tem logo ou não".
+- **`03-template-manual-final/`** — a estrutura de seções do documento
+  final entregue ao dono do negócio, mais um exemplo completo e fictício
+  (uma padaria com logo simples já existente) que serve de referência de
+  tom e qualidade.
+- **`04-integracao-webfy/`** — as 3 pontas que conectam o pipeline à
+  plataforma real: a especificação de UX da aba nova, quando/como o CRM
+  registra a geração, e a interface pluggable pro serviço externo de
+  geração de imagem (sem cravar qual API usar).
+
+## Decisões que este pacote NÃO re-decide
+
+Já vieram cravadas no pedido original e são tratadas aqui como dado de
+entrada, não como escolha em aberto: sem entrevista humana ao vivo (troca
+por inferência automática com score de confiança por módulo); lógica de
+"logo existente vira âncora, logo novo é sempre gerado em 3 opções, muda só
+o enquadramento"; formato de saída (página web navegável + PDF + link
+público); e a existência de um gate de qualidade equivalente ao
+`bnp-logic-auditor`/`bnp-brand-reviewer` da BNP, adaptado ao domínio.
+
+## O que fundamenta o racional causal de cada elemento gráfico
+
+Psicologia de design genérica e bem estabelecida — psicologia da cor,
+hierarquia tipográfica, Gestalt, teoria de affordance, custo
+preditivo/previsibilidade de padrão, contraste e legibilidade. Nunca o
+conteúdo do livro proprietário "Design Lógico" da BNP, que não pertence ao
+produto webfy e não foi consultado pra escrever este pacote.
