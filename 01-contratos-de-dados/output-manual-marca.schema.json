@@ -129,8 +129,8 @@
         },
         "alternativas_geradas": {
           "type": "array",
-          "description": "3 opções de logo novo — sempre presentes, com ou sem logo existente. Enquadramento muda (upsell opcional vs. opção inicial), não a geração.",
-          "minItems": 0,
+          "description": "3 opções de logo novo — sempre presentes (cada uma com status pendente/gerada/falhou), com ou sem logo existente. Enquadramento muda (upsell opcional vs. opção inicial), não a geração — o array nunca fica vazio, mesmo que as 3 falhem.",
+          "minItems": 3,
           "maxItems": 3,
           "items": {
             "type": "object",
@@ -197,10 +197,46 @@
     },
     "gate_qualidade": {
       "type": "object",
-      "description": "Resultado do agent-09-revisor-qualidade nessa versão.",
+      "description": "Resultado do agent-09-revisor-qualidade nessa versão. Estrutura definida pelo próprio agente (02-agentes/agent-09-revisor-qualidade.md <output_format>) — este schema só formaliza o contrato.",
+      "required": ["veredito", "violations"],
       "properties": {
         "veredito": { "type": "string", "enum": ["aprovado", "aprovado_com_ressalvas", "reprovado"] },
-        "achados": { "type": "array", "items": { "type": "string" } }
+        "violations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["type", "severity", "fragmento", "fix_hint"],
+            "properties": {
+              "type": { "type": "string", "enum": ["generico", "fato_inventado", "cruzamento_de_lead", "racional_ausente", "cor_fora_paleta", "enquadramento_incorreto", "linguagem_injetada"] },
+              "severity": { "type": "string", "enum": ["vermelho", "amarelo"] },
+              "fragmento": { "type": "string" },
+              "fix_hint": { "type": "string" }
+            },
+            "additionalProperties": false
+          }
+        },
+        "pontos_fortes": { "type": "array", "items": { "type": "string" } },
+        "escalar_para_fila_humana": { "type": "boolean" },
+        "escalonamento": {
+          "type": ["object", "null"],
+          "description": "Preenchido só quando escalar_para_fila_humana=true (3ª reprovação consecutiva). Ver agent-09-revisor-qualidade.md <output_format>.",
+          "properties": {
+            "fila": { "type": "string", "enum": ["suporte_operacoes_webfy"] },
+            "prioridade": { "type": "string", "enum": ["alta", "media", "baixa"] },
+            "criterio_prioridade": { "type": "string" },
+            "sla": { "type": "string" },
+            "payload_para_o_time": {
+              "type": "object",
+              "properties": {
+                "manual_atual": { "type": "object", "description": "output-manual-marca completo, mesmo reprovado." },
+                "motivo_reprovacao": { "type": "string" },
+                "sinais_originais": { "type": "object", "description": "input-sinais-negocio do lead." }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
       },
       "additionalProperties": false
     }

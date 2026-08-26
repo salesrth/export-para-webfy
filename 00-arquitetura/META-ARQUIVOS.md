@@ -33,7 +33,7 @@ manual carregar campos operacionais irrelevantes pro cliente final.
 | `logo_existente_detectado` | Decide qual dos dois textos de enquadramento a UI mostra pro vendedor ("achamos o logo de vocês" vs. "geramos 3 opções pra escolher"). |
 | `lacunas_abertas_count` | Quando > 0, a UI mostra o estado "pronto com pendências" em vez de "pronto" puro — nunca esconde lacuna. |
 | `gate_qualidade_ultimo_veredito` | Se `reprovado`, o manual NUNCA aparece como disponível pro vendedor, mesmo que estagio_atual diga "compondo_manual" tenha terminado — é o freio duro. |
-| `tentativas_geracao` | Circuit breaker: acima de um teto configurável (recomendado: 3), para de tentar sozinho e cai pra fila humana em vez de regenerar em loop. |
+| `ciclos_qualidade_atual` | Circuit breaker do gate de qualidade: ao atingir o teto de 2 ciclos automáticos (3ª reprovação), para de tentar sozinho e cai pra fila humana em vez de regenerar em loop. Reseta a cada geração nova — não é o mesmo contador de `versao_manual_atual`. |
 | `status_entrega` | Rastreado separado do estágio técnico — "pronto" e "entregue" são coisas diferentes; um manual pode ficar pronto e nunca ser enviado, e isso é visível. |
 | `historico_estagios` | Trilha de auditoria mínima — não é log completo, é o rastro de transições pra debugar "por que esse lead travou". |
 

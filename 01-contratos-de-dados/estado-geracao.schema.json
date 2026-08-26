@@ -46,7 +46,7 @@
     "logo_existente_detectado": { "type": "boolean" },
     "lacunas_abertas_count": { "type": "integer", "minimum": 0 },
     "gate_qualidade_ultimo_veredito": { "type": ["string", "null"], "enum": ["aprovado", "aprovado_com_ressalvas", "reprovado", null] },
-    "tentativas_geracao": { "type": "integer", "minimum": 0, "description": "Conta regenerações completas do pipeline (não regeração pontual de logo)." },
+    "ciclos_qualidade_atual": { "type": "integer", "minimum": 0, "description": "Conta ciclos de correção dentro do gate de qualidade (agent-09) da geração ATUAL — não confundir com `versao_manual_atual`, que conta regenerações completas/pontuais entre versões. Reseta a 0 a cada nova geração completa. Ao atingir o teto de 2 ciclos automáticos (3ª reprovação), escala pra fila humana — ver 02-agentes/agent-09-revisor-qualidade.md." },
     "erro": {
       "type": ["object", "null"],
       "properties": {

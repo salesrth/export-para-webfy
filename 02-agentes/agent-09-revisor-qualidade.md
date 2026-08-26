@@ -63,9 +63,15 @@ original do MESMO `lead_id`, pra conferência cruzada de fato.
 </execution>
 
 <output_format>
+Preenche o campo `gate_qualidade` de `output-manual-marca.schema.json` —
+os nomes abaixo são os nomes REAIS do schema, não um formato próprio deste
+agente. `lead_id` NÃO entra neste objeto (já existe no nível raiz do
+manual, `additionalProperties: false` em `gate_qualidade` bloquearia
+campo duplicado) — é conferido pelo agente pra validação cruzada, não
+reescrito aqui:
+
 ```json
-{ "verdict": "aprovado|aprovado_com_ressalvas|reprovado",
-  "lead_id": "...",
+{ "veredito": "aprovado|aprovado_com_ressalvas|reprovado",
   "violations": [ { "type": "generico|fato_inventado|cruzamento_de_lead|racional_ausente|cor_fora_paleta|enquadramento_incorreto|linguagem_injetada",
     "severity": "vermelho|amarelo", "fragmento": "...", "fix_hint": "..." } ],
   "pontos_fortes": ["..."],

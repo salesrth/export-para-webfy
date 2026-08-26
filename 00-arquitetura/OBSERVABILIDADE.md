@@ -23,9 +23,10 @@
 
 ## 2. Taxa de reprovação por eixo
 
-O agent-09 audita 4 eixos (`02-agentes/agent-09-revisor-qualidade.md`):
-especificidade, fidelidade factual, isolamento entre leads, e completude do
-racional. Cada `violation.type` mapeia pra um eixo:
+O agent-09 audita 5 eixos (`02-agentes/agent-09-revisor-qualidade.md`):
+especificidade, fidelidade factual, isolamento entre leads, completude do
+racional, e ausência de linguagem injetada. Cada `violation.type` mapeia pra
+um eixo:
 
 | Eixo | `violation.type` |
 |---|---|
@@ -33,6 +34,7 @@ racional. Cada `violation.type` mapeia pra um eixo:
 | Fidelidade factual | `fato_inventado` |
 | Isolamento entre leads | `cruzamento_de_lead` |
 | Completude do racional | `racional_ausente` |
+| Ausência de linguagem injetada | `linguagem_injetada` |
 | (achado auxiliar, não eixo próprio) | `cor_fora_paleta`, `enquadramento_incorreto` |
 
 - **O que mede:** fração de reprovações atribuível a cada eixo, ao longo do
@@ -77,7 +79,7 @@ racional. Cada `violation.type` mapeia pra um eixo:
 ## 5. Quantos leads escalam pra fila humana e por quê
 
 - **O que mede:** volume de leads que atingem a 3ª reprovação
-  (`estado_geracao.tentativas_geracao` no teto) e vão pra fila de
+  (`estado_geracao.ciclos_qualidade_atual` no teto) e vão pra fila de
   suporte/operações do webfy (`02-agentes/agent-09-revisor-qualidade.md`),
   quebrado pelo `motivo_reprovacao` agregado dos 3 ciclos.
 - **Por que importa:** é o teto de custo humano da automação — se esse
@@ -123,7 +125,7 @@ racional. Cada `violation.type` mapeia pra um eixo:
 ## 7. Onde isso se conecta
 
 - `01-contratos-de-dados/estado-geracao.schema.json` — campos-fonte:
-  `gate_qualidade_ultimo_veredito`, `tentativas_geracao`,
+  `gate_qualidade_ultimo_veredito`, `ciclos_qualidade_atual`,
   `confianca_por_modulo`, `historico_estagios`.
 - `02-agentes/agent-09-revisor-qualidade.md` — origem de `violations[]` e
   do payload de escalonamento.

@@ -32,11 +32,18 @@ real, navegável, pra um vendedor mostrar a um dono de negócio.
   geração automática completa por `lead_id`). Isso não é opcional nem pra
   MVP: sem o teto, o primeiro piloto já sai com risco de custo de API sem
   controle.
-- **O gate de qualidade básico** — os 4 eixos originais de
-  `agent-09-revisor-qualidade.md` (especificidade, fidelidade factual,
-  isolamento entre leads, racional causal completo) e o ciclo de correção/
-  escalonamento de `ARQUITETURA-AGENTES.md §1`. Nenhum manual sai sem gate
-  — isso é P0 mesmo num piloto de 1 lead.
+- **O gate de qualidade básico** — os 5 eixos de `agent-09-revisor-
+  qualidade.md` (especificidade, fidelidade factual, isolamento entre
+  leads, racional causal completo, e a VERSÃO BÁSICA do 5º eixo — ausência
+  de claim óbvio/desproporcional tipo "o melhor da cidade" sem fonte
+  rastreável) e o ciclo de correção/escalonamento de `ARQUITETURA-AGENTES
+  .md §1`. Nenhum manual sai sem gate — isso é P0 mesmo num piloto de 1
+  lead. O agente é um prompt único com os 5 eixos embutidos: não há como
+  implementar "só 4" sem editar o prompt, então na prática o 5º eixo
+  entra junto desde o primeiro dia — só o REFINAMENTO dele (detecção
+  sofisticada de padrão sutil de injeção) é que fica em P2, não a
+  checagem básica (ver `SEGURANCA-PROMPT-INJECTION.md` abaixo, nota de
+  categorização mista).
 - **Semântica básica de erro** — `ARQUITETURA-AGENTES.md §6`: retry com
   backoff pra falha transitória/estrutural (teto de 3) e o fato de que
   falha de qualidade usa um orçamento de tentativa separado do gate. Sem

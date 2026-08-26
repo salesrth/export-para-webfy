@@ -44,7 +44,7 @@ versão vigente (`output-manual-marca` + `estado_geracao`).
 5. Encaminhe o resultado do módulo pro `agent-10` reescrever só o
    `racional` daquele elemento — não o manual inteiro.
 6. Encaminhe pro `agent-09` uma checagem pontual (só o elemento alterado
-   contra os 4 eixos, não reauditoria integral do manual) antes de
+   contra os 5 eixos, não reauditoria integral do manual) antes de
    publicar a nova versão.
 7. Incremente `versao` (output) e `versao_manual_atual` (estado) em 1,
    registre a transição em `link_historico_versoes`, preserve todos os
@@ -82,4 +82,3 @@ idêntico byte a byte à versão anterior. Mais um relatório curto:
   reescreve `gate_qualidade` além do que a checagem pontual do agent-09
   determinar para aquele elemento.
 </constraints>
-</output>

@@ -142,8 +142,10 @@ etapas.
 
 ## Passo 10 — Gate de qualidade
 
-- **O que acontece:** o manual é auditado contra 4 eixos: especificidade,
-  fidelidade factual, isolamento entre leads, e completude do racional.
+- **O que acontece:** o manual é auditado contra 5 eixos: especificidade,
+  fidelidade factual, isolamento entre leads, completude do racional, e
+  ausência de linguagem que pareça injetada por texto de origem não
+  confiável (ver `00-arquitetura/SEGURANCA-PROMPT-INJECTION.md`).
 - **Etapa:** `agent-09-revisor-qualidade`.
 - **Entra:** manual completo (Passo 9) + `input-sinais-negocio` original.
 - **Sai:** veredito `aprovado` / `aprovado_com_ressalvas` / `reprovado`.

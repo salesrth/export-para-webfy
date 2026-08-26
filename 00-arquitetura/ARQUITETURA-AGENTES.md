@@ -25,7 +25,7 @@ FASE 2 — DESCOBERTA E SISTEMA VISUAL (paralelo depois do agent-02)
        ├──▶ agent-03-posicionamento
        ├──▶ agent-04-sistema-cor  ──┐
        ├──▶ agent-05-tipografia-e-composicao
-       └──▶ [agent-06-logo-guardiao OU agent-07-logo-alternativas]  (ver §3)
+       └──▶ [agent-06-logo-guardiao (só se logo_url) →] agent-07-logo-alternativas (sempre)  (ver §3)
                                      │
 FASE 3 — COMPOSIÇÃO (sequencial, depende de tudo acima)
   agent-08-compositor-manual

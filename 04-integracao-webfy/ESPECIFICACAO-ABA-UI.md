@@ -85,7 +85,7 @@ Nome sugerido da aba: **"Manual de marca"**, ao lado de abas existentes tipo
 ### 2.4 Erro / lacunas pendentes que bloqueiam
 
 - `estagio_atual=falhou`, ou `gate_qualidade_ultimo_veredito=reprovado` após
-  o teto de tentativas automáticas (`tentativas_geracao` no limite).
+  o teto de tentativas automáticas (`ciclos_qualidade_atual` no limite).
 - Mensagem honesta pro vendedor: o que faltou (ex: "sinais insuficientes
   pra gerar um manual de qualidade — esse negócio tem poucas informações
   públicas") + ação disponível: **"Tentar novamente"** ou, se o motivo for
