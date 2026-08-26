@@ -90,7 +90,37 @@ racional. Cada `violation.type` mapeia pra um eixo:
   é o insumo que informa essa decisão futura (volume real de escalonamento
   antes de prometer um SLA que a operação não consegue sustentar).
 
-## 6. Onde isso se conecta
+## 6. Feedback do vendedor sobre a qualidade do manual
+
+- **O que captura:** o vendedor precisa poder avaliar o manual gerado —
+  positivo/negativo, com motivo curto opcional (texto livre, não
+  obrigatório). É um sinal qualitativo direto de quem usa o manual como
+  ferramenta de venda no dia a dia, diferente das métricas §1-§5 (que vêm
+  do gate automático, não de julgamento humano).
+- **Onde faz sentido capturar:** na própria aba "Manual de marca"
+  (`04-integracao-webfy/ESPECIFICACAO-ABA-UI.md`, estado "Pronto"), perto
+  dos botões de ação — não precisa ser modal separado nem fluxo à parte.
+  O momento mais natural é perto de "Marcar como enviado" ou logo depois,
+  quando o vendedor já teve contato real com o conteúdo.
+- **Por que importa:** este feedback é o insumo mais direto pra iterar os
+  prompts dos agentes (2 a 10) — sinaliza o que a métrica automática do
+  gate não pega (ex: manual "aprovado" pelo agent-09 mas que o vendedor
+  achou genérico ou fora do tom pro tipo de negócio). Esta versão do
+  blueprint não decide COMO esse feedback vira ajuste de prompt/agente —
+  só que o dado precisa existir e ser capturável, pra não depender de
+  reclamação informal/anedótica de vendedor chegando por outro canal.
+- **Escopo do dado:** fica de fora de `estado-geracao.schema.json` neste
+  momento (schema não muda nesta rodada) — quando o webfy implementar a
+  captura, o campo natural é uma extensão do estado por lead (associado
+  ao `lead_id` e à versão do manual avaliada, já que o manual pode ter
+  passado por regeração — ver `VERSIONAMENTO.md`), não um registro solto
+  sem vínculo com qual versão foi avaliada.
+- **Corte útil, quando o volume permitir:** cruzar feedback negativo com
+  categoria de negócio e com a distribuição de confiança por módulo (§4)
+  — um padrão de "feedback negativo concentrado em categoria X + módulo Y
+  sempre baixo" é sinal mais forte que qualquer um dos dois sozinho.
+
+## 7. Onde isso se conecta
 
 - `01-contratos-de-dados/estado-geracao.schema.json` — campos-fonte:
   `gate_qualidade_ultimo_veredito`, `tentativas_geracao`,

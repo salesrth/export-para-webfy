@@ -36,7 +36,8 @@ export-para-webfy/
 │   ├── VERSIONAMENTO.md
 │   ├── OBSERVABILIDADE.md
 │   ├── ESTRATEGIA-DE-TESTES.md
-│   └── LGPD-E-DADOS-PESSOAIS.md
+│   ├── LGPD-E-DADOS-PESSOAIS.md
+│   └── ESCALA-E-CONCORRENCIA.md
 ├── 01-contratos-de-dados/
 │   ├── input-sinais-negocio.schema.json
 │   ├── output-manual-marca.schema.json
@@ -73,9 +74,12 @@ export-para-webfy/
   paralelismo, gates de qualidade) e como funciona o meta-arquivo de estado
   por lead (equivalente ao `.agent/state.json` da BNP, mas por negócio em
   vez de por task de projeto). Também cobre versionamento pós-entrega
-  (`VERSIONAMENTO.md`), métricas do pipeline (`OBSERVABILIDADE.md`),
-  estratégia de testes de agente (`ESTRATEGIA-DE-TESTES.md`) e o tratamento
-  de dado pessoal em reviews de cliente (`LGPD-E-DADOS-PESSOAIS.md`).
+  (`VERSIONAMENTO.md`), métricas do pipeline e o loop de feedback do
+  vendedor (`OBSERVABILIDADE.md`), estratégia de testes de agente
+  (`ESTRATEGIA-DE-TESTES.md`), o tratamento de dado pessoal em reviews de
+  cliente (`LGPD-E-DADOS-PESSOAIS.md`), e o comportamento do pipeline sob
+  volume alto de leads — fila de processamento, corrida entre vendedores no
+  mesmo lead, e throughput de geração de imagem (`ESCALA-E-CONCORRENCIA.md`).
 - **`01-contratos-de-dados/`** — os 3 JSON Schemas que definem exatamente o
   que entra (sinais coletados do negócio), o que sai (manual de marca
   gerado) e como o progresso é rastreado (estado de geração por lead,
@@ -105,8 +109,20 @@ entrada, não como escolha em aberto: sem entrevista humana ao vivo (troca
 por inferência automática com score de confiança por módulo); lógica de
 "logo existente vira âncora, logo novo é sempre gerado em 3 opções, muda só
 o enquadramento"; formato de saída (página web navegável + PDF + link
-público); e a existência de um gate de qualidade equivalente ao
-`bnp-logic-auditor`/`bnp-brand-reviewer` da BNP, adaptado ao domínio.
+público); a existência de um gate de qualidade equivalente ao
+`bnp-logic-auditor`/`bnp-brand-reviewer` da BNP, adaptado ao domínio; a
+feature ser add-on pago/premium do webfy, com gate de entitlement antes do
+disparo (`04-integracao-webfy/INTEGRACAO-CRM.md §0`); e white-label total
+pro dono do negócio final — nenhuma marca "webfy" visível em PIN/manual/PDF/
+mensagem automática, substituível por `nome_exibicao_vendedor`
+(`04-integracao-webfy/ESPECIFICACAO-ABA-UI.md §6`).
+
+**Idioma — decisão consciente, não esquecimento:** este blueprint assume
+PT-BR fixo em todo o pipeline (sinais, prompts de agente, manual gerado,
+UI). Nenhum schema tem campo de idioma nesta versão. Se o webfy expandir
+pra mercado não lusófono no futuro, isso exige revisão explícita deste
+pacote inteiro (prompts de agente, textos de UI, formato de data/moeda) —
+não é um campo isolado a adicionar depois.
 
 ## O que fundamenta o racional causal de cada elemento gráfico
 

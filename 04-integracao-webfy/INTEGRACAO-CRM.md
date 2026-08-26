@@ -1,5 +1,36 @@
 # Integração com o CRM do webfy
 
+## 0. Pré-condição obrigatória: entitlement do add-on
+
+**Manual de marca automático é add-on pago/premium do webfy — não vem
+grátis pra toda conta de vendedor.** Isso significa que existe um gate de
+"direito de uso" (entitlement) que precisa ser checado **antes** de
+qualquer disparo do pipeline, seja automático (Opção A) ou sob demanda
+(Opção B).
+
+- **Onde o gate acontece:** no ponto de entrada do pipeline, antes do Passo
+  2 (`agent-01-ingestor-sinais`, `CHRONOLOGIA.md`) rodar — nunca depois. O
+  orquestrador confere se a conta do vendedor (ou da equipe/organização,
+  dependendo de como o webfy modela billing) tem o add-on ativo. Se não
+  tiver, o pipeline **nem inicia** — zero custo de processamento gasto em
+  conta sem direito de uso.
+- **Escopo do dado de entitlement:** é informação de CONTA, não de lead —
+  não pertence a `estado-geracao.schema.json` (que é um registro por
+  `lead_id`, ver `00-arquitetura/META-ARQUIVOS.md`). Este blueprint não
+  sabe como o billing do webfy modela isso internamente (fora de escopo) —
+  só documenta que o checkpoint tem que existir e onde ele fica na
+  sequência, não o schema/tabela por trás dele.
+- **O que acontece na UI quando falta o add-on:** nunca erro silencioso,
+  nunca botão que some. A aba "Manual de marca" mostra um estado de upsell
+  explícito em vez do estado padrão "Antes de gerar" — ver
+  `ESPECIFICACAO-ABA-UI.md §2.0`.
+- **As duas opções de disparo (§1) ficam atrás deste gate igualmente:** a
+  Opção A (automática ao achar o lead) só dispara pra leads de contas com
+  add-on ativo — não faz sentido gerar manual em background pra conta que
+  não pode nem ver o resultado. A Opção B (sob demanda) bloqueia o clique
+  em "Gerar manual de marca" antes de chegar no backend, substituindo o
+  botão pelo CTA de upsell.
+
 ## 1. Quando a geração dispara
 
 Duas opções possíveis — **recomendação: automática ao achar o lead**, com

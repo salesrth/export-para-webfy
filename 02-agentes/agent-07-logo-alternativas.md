@@ -80,4 +80,16 @@ Array `logo.alternativas_geradas[]` conforme `output-manual-marca.schema.json`
   ou implicar no brief, no racional ou em qualquer texto que acompanha as
   3 opções que o direito autoral pertence automaticamente ao dono do
   negócio — trate a questão como em aberto, não como resolvida.
+- **Risco de colisão com marca registrada de terceiro:** este agente não
+  tem como garantir que nenhuma das 3 opções geradas colide com uma marca
+  já registrada — isso exigiria busca formal em base de marcas registradas
+  (INPI ou equivalente), o que está fora do escopo deste agente e deste
+  pipeline. Por isso, as 3 opções sempre saem acompanhadas de um AVISO
+  explícito de risco (não um bloqueio — a geração não pára por causa
+  disso): algo como "essas opções não passaram por busca de anterioridade
+  de marca — recomenda-se checagem antes de uso comercial definitivo,
+  especialmente se o negócio for entrar em disputa ou franquia". Esse
+  aviso é texto fixo que acompanha `logo.alternativas_geradas[]` no
+  manual (composto pelo `agent-08-compositor-manual` a partir do racional
+  já produzido aqui), não uma verificação real de anterioridade.
 </constraints>

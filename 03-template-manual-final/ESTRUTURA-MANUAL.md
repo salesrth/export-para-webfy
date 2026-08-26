@@ -74,15 +74,56 @@ IMAGEM.md §7`). Linguagem sugerida pro dono do negócio, sem alarmar:
 autoral sobre esse tipo de imagem ainda está em definição no mercado, e
 vamos te avisar assim que tivermos uma posição clara sobre isso."
 
+**Segunda nota obrigatória, junto da anterior:** aviso de risco de colisão
+com marca registrada de terceiro (`02-agentes/agent-07-logo-alternativas.md`,
+constraint correspondente) — não é bloqueio, é alerta. Linguagem sugerida:
+"essas opções não passaram por uma busca de anterioridade de marca —
+recomendamos checar isso antes de registrar ou usar comercialmente de
+forma definitiva, principalmente se você pretende entrar com pedido de
+franquia ou tiver receio de disputa de marca."
+
 ## 6. Aplicações práticas
 
 Uma subseção por contexto relevante à categoria do negócio, cada uma com
-uma prévia visual e 2-3 frases de orientação prática:
-- Cartão de visita
-- Post de rede social
-- Fachada (se negócio físico)
-- Uniforme (se atendimento presencial)
-- Embalagem (se produto)
+uma prévia visual e 2-3 frases de orientação prática. Specs mínimas por
+peça (o compositor aplica a que for relevante à categoria do negócio —
+uma clínica não recebe subseção de embalagem, por exemplo):
+
+- **Cartão de visita** — proporção padrão 9cm x 5cm (paisagem, padrão de
+  gráfica no Brasil). Logo no canto superior esquerdo ou centralizado no
+  topo (nunca esticada pra preencher espaço — ver regra de uso do logo,
+  §5); nome do negócio em destaque com a fonte de título; paleta principal
+  como cor de fundo ou faixa, nunca as 4 cores da paleta competindo ao
+  mesmo tempo no mesmo cartão.
+- **Post de rede social** — duas proporções cobertas: quadrada (1:1, feed)
+  e vertical (9:16, story/reel). Área segura pra texto: manter margem
+  interna de pelo menos 8% da largura/altura em todos os lados livre de
+  texto ou elementos importantes da logo, porque o Instagram e outras
+  plataformas cortam a prévia e sobrepõem UI própria (ícones, avatar,
+  legenda) nas bordas — texto colado na borda vira ilegível ou cortado.
+- **Fachada/placa** (se negócio físico) — aqui o requisito não é o
+  contraste AA 4.5:1 de tela (`ACESSIBILIDADE.md`, que vale pra web/PDF);
+  é legibilidade física a distância. Orientação prática: contraste forte
+  entre fundo e texto da placa (cor escura da paleta contra cor clara, ou
+  vice-versa — nunca duas cores próximas em luminosidade), letra grossa o
+  suficiente pra ler de dentro de um carro ou da calçada oposta, sem
+  ornamento ou fonte fina demais que sinta bem em tela mas suma de longe.
+  Não é uma medida numérica única (depende da distância real de leitura
+  do local) — é orientação qualitativa pro dono do negócio levar pro
+  fornecedor da placa.
+- **Uniforme/aplicação em tecido** (se atendimento presencial) — a paleta
+  definida em hex é pra tela; tecido, bordado e tinta serigráfica nem
+  sempre reproduzem a cor exata. Orientação explícita no manual: "a cor
+  que você vê aqui é a referência digital — quem for produzir a peça
+  física (gráfica, bordadeira, serigrafia) deve aproximar pra uma cor
+  Pantone equivalente; pequena variação de tom entre tela e tecido é
+  normal e não é erro do fornecedor." Essa responsabilidade de conversão
+  pra Pantone é de quem produz a peça física, não do pipeline — o manual
+  não gera código Pantone, só avisa que a conversão é necessária.
+- **Embalagem** (se produto) — logo em tamanho legível mesmo em embalagem
+  pequena (respeitar o tamanho mínimo definido em §5), paleta aplicada de
+  forma consistente com o resto do material pra reforçar reconhecimento
+  na prateleira/balcão.
 
 ## 7. Anti-padrões — o que evitar
 

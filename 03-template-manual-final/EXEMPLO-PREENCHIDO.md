@@ -88,21 +88,38 @@ direito autoral sobre esse tipo de imagem ainda está em definição no
 mercado, e vamos te avisar assim que tivermos uma posição jurídica clara
 sobre isso.*
 
+*Além disso: essas opções não passaram por uma busca de anterioridade de
+marca — recomendamos checar isso antes de registrar ou usar comercialmente
+de forma definitiva, principalmente se você pretende entrar com pedido de
+franquia ou tiver receio de disputa de marca.*
+
 ## Aplicações práticas
 
-**Cartão de visita:** logo no canto superior esquerdo, nome em destaque no
-centro, telefone/Instagram embaixo em texto pequeno na cor marrom-escuro.
+**Cartão de visita** (9cm x 5cm, paisagem): logo no canto superior
+esquerdo em tamanho real (nunca esticada), nome "Padaria Bom Trigo" em
+destaque no centro com a fonte de título arredondada, telefone/Instagram
+embaixo em texto pequeno na cor marrom-escuro. Fundo bege-fundo — só duas
+cores da paleta no mesmo cartão (marrom-escuro + bege-fundo), sem competir
+com trigo-claro nem marrom-pão ao mesmo tempo.
 
-**Post de rede social:** fundo bege-fundo ou foto do produto, com uma faixa
-fina marrom-pão na parte de baixo com o nome da padaria — mantém
-identidade visual mesmo variando as fotos.
+**Post de rede social** (1:1 pro feed, 9:16 pra story/reel): fundo
+bege-fundo ou foto do produto, com uma faixa fina marrom-pão na parte de
+baixo com o nome da padaria — mantém identidade visual mesmo variando as
+fotos. Deixe pelo menos 8% de margem livre de texto em todas as bordas —
+o Instagram corta ou cobre esse espaço com os próprios ícones e legenda.
 
 **Fachada:** letreiro com fundo marrom-pão e letras trigo-claro (ou o
-inverso) — o contraste forte ajuda a ler de longe, e reforça a cor que já
-é a identidade visual mais forte da marca.
+inverso) — o contraste forte entre as duas cores (não a régua de tela, uma
+régua de "dá pra ler da calçada oposta ou de dentro do carro") ajuda a ler
+de longe, e reforça a cor que já é a identidade visual mais forte da
+marca. Evite letra fina — prefira um traço grosso o suficiente pra não
+sumir à distância.
 
 **Uniforme:** avental bege-fundo com a logo bordada em marrom-pão no peito
-— discreta, sem competir com o produto que o cliente está comprando.
+— discreta, sem competir com o produto que o cliente está comprando. O
+marrom-pão (`#8a5a2e`) é a referência digital; quem for bordar deve pedir
+à bordadeira o Pantone marrom mais próximo — pequena variação de tom entre
+tela e linha de bordado é normal, não é erro de ninguém.
 
 ## Anti-padrões — o que evitar
 

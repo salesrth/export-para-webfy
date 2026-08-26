@@ -14,6 +14,26 @@ Nome sugerido da aba: **"Manual de marca"**, ao lado de abas existentes tipo
 
 ## 2. Estados de tela
 
+### 2.0 Sem add-on ativo (upsell)
+
+- Estado que precede o 2.1 quando a conta do vendedor não tem o add-on
+  premium ativo (ver gate de entitlement em `INTEGRACAO-CRM.md §0`) —
+  substitui completamente o estado padrão, nunca aparece junto dele.
+- Mostra: nome do negócio (contexto de que o manual existiria pra esse
+  lead), texto de valor curto ("gere um manual completo de identidade
+  visual pra usar como argumento extra na venda — disponível no plano
+  [nome do add-on]"), e CTA **"Conhecer o add-on"** ou **"Ativar agora"**
+  (destino exato — tela de billing/upgrade do webfy — é decisão de
+  implementação, fora de escopo deste blueprint).
+- **Nunca** um erro genérico, campo desabilitado sem explicação, ou botão
+  que simplesmente não responde ao clique — falta de add-on é oportunidade
+  de upsell, não falha. O tom é o mesmo dos outros textos de apoio da aba:
+  direto, sem pressão agressiva.
+- Se o vendedor ativar o add-on enquanto está com um lead aberto nesse
+  estado, a tela reflete a mudança e passa pro estado 2.1 na próxima
+  interação (não precisa recarregar a página inteira, mas também não
+  precisa ser tempo real — um refresh normal da aba já resolve).
+
 ### 2.1 Antes de gerar
 
 - Estado padrão pra lead recém-capturado sem manual ainda (`estagio_atual`
@@ -125,3 +145,49 @@ sem email de verificação.
 - **Escopo do PIN:** protege o link público (visão do dono do negócio fora
   do CRM). Não afeta a aba dentro do CRM do webfy, que já tem seu próprio
   controle de acesso de vendedor/conta.
+
+## 6. White-label total — nenhuma marca do webfy visível pro dono do negócio
+
+O manual entregue ao dono do negócio é vendido como propriedade dele — não
+pode carregar nenhuma marca, crédito ou menção visível de "webfy" em
+lugar nenhum que o dono do negócio final enxerga. Isso cria uma tensão
+específica: a tela de PIN (§5) é tecnicamente hospedada pela infraestrutura
+do webfy e é a **primeira coisa** que o dono do negócio vê ao abrir o
+link — se ela estampar "webfy" (logo, nome, rodapé, favicon, título de
+aba do navegador), o white-label quebra antes mesmo do conteúdo carregar.
+
+**Regra:** a tela de PIN, o manual web (dentro e fora do CRM) e o PDF
+exportado são **visualmente neutros por padrão**, e **personalizáveis com
+a identidade do vendedor/agência** que está usando o webfy pra vender —
+nunca com a marca do webfy.
+
+- **Campo `nome_exibicao_vendedor`:** todo ponto de contato do dono do
+  negócio com o manual (tela de PIN, cabeçalho/rodapé do manual web,
+  capa e rodapé do PDF, qualquer email ou mensagem automática que
+  mencione o manual — ex: notificação de link gerado) usa esse campo
+  como substituto de qualquer branding, no lugar de "webfy". Se o
+  vendedor/agência não preencheu esse campo, o padrão é neutro genérico
+  ("Manual de marca" sem atribuição de plataforma) — nunca cai pro nome
+  "webfy" como fallback.
+- **Onde isso se aplica, explicitamente:**
+  - **Tela de PIN (§5):** sem logo/nome "webfy" em nenhum elemento —
+    título da aba do navegador, cabeçalho da página, rodapé, favicon.
+    Usa `nome_exibicao_vendedor` se preenchido, senão layout neutro.
+  - **Manual web (link público e dentro do CRM):** mesma regra — o
+    dono do negócio nunca vê "webfy" navegando pelas seções do manual.
+    Dentro do CRM, a UI do vendedor (fora da visão do dono do negócio)
+    pode seguir com a marca normal do webfy — a regra vale só pro que o
+    **dono do negócio final** enxerga, não pra interface interna do
+    vendedor.
+  - **PDF exportado:** capa, cabeçalho/rodapé de cada página, e
+    metadados do arquivo (autor/produtor do PDF) sem menção a "webfy".
+  - **Email/mensagem automática:** qualquer notificação automática que
+    mencione o manual (ex: "seu manual de marca está pronto", se o webfy
+    tiver esse tipo de disparo) usa o mesmo `nome_exibicao_vendedor` no
+    remetente/assinatura visível ao dono do negócio — nunca "equipe
+    webfy".
+- **O que NÃO muda:** a regra é sobre o que o **dono do negócio final**
+  vê. A UI interna do vendedor dentro do CRM (a própria aba "Manual de
+  marca", os estados 2.0-2.4 descritos acima) pode manter a marca webfy
+  normalmente — é ferramenta de trabalho do vendedor, não material
+  white-label entregue ao cliente.
