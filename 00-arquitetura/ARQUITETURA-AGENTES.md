@@ -114,3 +114,78 @@ Total end-to-end razoável: **2 a 5 minutos** do disparo até "pronto", sem
 contar fila de processamento se houver muitos leads simultâneos. Ver
 `CHRONOLOGIA.md` pro detalhamento passo a passo com esses tempos aplicados
 ao fluxo completo.
+
+## 6. Semântica de erro e retry por agente
+
+Nem toda falha é do mesmo tipo, e tratar todas como se fossem custa caro
+(retry cego gastando o orçamento do gate de qualidade em algo que não tem
+nada a ver com qualidade de conteúdo) ou devagar demais (o gate de
+qualidade "tentando corrigir" o que na verdade foi um timeout de rede).
+Três categorias, cada uma com orçamento de tentativa próprio:
+
+### 6.1 Falha transitória (infra/provedor, não é falha do agente)
+
+- **O que é:** timeout de chamada ao modelo, rate limit do provedor de LLM
+  ou do serviço de geração de imagem, erro de rede, erro 5xx do provedor.
+- **Comportamento:** retry automático com backoff (ex: exponencial), teto
+  pequeno de tentativas — recomendação: **3**. Não conta como reprovação do
+  gate de qualidade — é reprocessamento da MESMA chamada, não uma rodada
+  pelo ciclo do agent-09.
+- **Depois do teto:** se as 3 tentativas falharem, isso vira uma falha
+  registrada em `estado_geracao.erro` (`etapa`, `mensagem`, `ocorrido_em`,
+  ver `01-contratos-de-dados/estado-geracao.schema.json`) e o lead vai pro
+  estágio `falhou` — não fica girando indefinidamente.
+
+### 6.2 Falha de qualidade (o agente respondeu, mas o conteúdo não presta)
+
+- **O que é:** output bem formado, mas reprovado no critério de conteúdo —
+  o ciclo já documentado em `02-agentes/agent-09-revisor-qualidade.md`
+  (genérico, fato inventado, cruzamento de lead, racional ausente, cor fora
+  da paleta).
+- **Comportamento:** NÃO é retry cego da mesma chamada. É o ciclo do
+  agent-09 — reprovado volta pro agente responsável pelo achado
+  especificamente, no máximo 2 ciclos automáticos (3ª reprovação escala pra
+  fila humana de suporte/operações do webfy, ver §1 acima e
+  `agent-09-revisor-qualidade.md`).
+- **Diferença chave com 6.1:** falha transitória é "o modelo não respondeu
+  direito" (causa técnica); falha de qualidade é "o modelo respondeu, mas o
+  julgamento de conteúdo reprovou" (causa de critério). São orçamentos de
+  tentativa separados — um nunca consome o outro.
+
+### 6.3 Falha estrutural (schema inválido, campo obrigatório ausente)
+
+- **O que é:** o agente respondeu, mas o output não bate com o
+  schema/formato esperado (`01-contratos-de-dados/*.schema.json` pros
+  campos finais, ou o `<output_format>` de cada `agent-XX.md` pros
+  intermediários) — campo obrigatório ausente, tipo errado, enum inválido,
+  JSON malformado. Esta é também a segunda camada de defesa contra prompt
+  injection (`00-arquitetura/SEGURANCA-PROMPT-INJECTION.md §3`): output
+  fora de schema é rejeitado antes de propagar pro próximo agente, seja a
+  causa um bug de formatação comum ou uma tentativa de manipulação via
+  texto de origem.
+- **Comportamento:** trate como falha transitória **PARA FINS DE RETRY**
+  (pode ser erro momentâneo do modelo produzindo saída malformada, sem
+  relação com a qualidade do conteúdo em si) — mesmo teto de 3 tentativas
+  com backoff de §6.1.
+- **Diferença crítica:** se persistir após os retries, escala **DIRETO**
+  pra fila humana — não entra no ciclo de 2-3 tentativas do gate de
+  qualidade (agent-09). São categorias de problema diferentes que não
+  deveriam competir pelo mesmo orçamento de tentativas: um agente que não
+  consegue produzir JSON válido depois de 3 tentativas não vai
+  magicamente acertar rodando mais 2-3 vezes pelo ciclo do agent-09 — esse
+  ciclo foi desenhado pra corrigir JULGAMENTO de conteúdo, não formato.
+
+### 6.4 Resumo — três orçamentos de tentativa independentes
+
+| Categoria | Gatilho | Retry | Teto | Depois do teto |
+|---|---|---|---|---|
+| Transitória | timeout / rate limit / erro de rede | automático, backoff | 3 | `estado_geracao.erro` + estágio `falhou` |
+| Qualidade | agent-09 reprova conteúdo | volta pro agente responsável pelo achado | 2 ciclos (3ª reprovação escala) | fila humana de suporte/operações webfy |
+| Estrutural | schema inválido / campo obrigatório ausente | automático, backoff (mesmo tratamento de 6.1) | 3 | fila humana DIRETO — não passa pelo ciclo de qualidade |
+
+Regra de ouro: falha transitória e falha estrutural competem pelo MESMO
+orçamento de retry técnico (3 tentativas, backoff), porque as duas são "o
+agente não produziu uma resposta utilizável" por motivo técnico. Falha de
+qualidade tem orçamento PRÓPRIO (2-3 ciclos do agent-09), porque é um
+problema de julgamento de conteúdo, não técnico — as duas contagens nunca
+se somam nem se substituem uma pela outra.

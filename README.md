@@ -4,6 +4,11 @@
 > código pronto pra rodar.** Um dev (ou uma sessão Claude Code dentro do
 > repo do webfy) usa este pacote pra implementar a feature no stack real da
 > plataforma — este pacote não conhece esse stack e não deveria conhecer.
+>
+> **Próximo passo de leitura recomendado depois deste README:**
+> `00-ORDEM-DE-IMPLEMENTACAO.md` — o que implementar primeiro (P0) pra ter
+> um MVP funcional, o que espera escala de verdade (P1), e o que é
+> hardening pra depois do lançamento (P2).
 
 ## O que é isto
 
@@ -29,6 +34,7 @@ real da plataforma.
 ```
 export-para-webfy/
 ├── README.md
+├── 00-ORDEM-DE-IMPLEMENTACAO.md
 ├── CHRONOLOGIA.md
 ├── 00-arquitetura/
 │   ├── ARQUITETURA-AGENTES.md
@@ -37,7 +43,8 @@ export-para-webfy/
 │   ├── OBSERVABILIDADE.md
 │   ├── ESTRATEGIA-DE-TESTES.md
 │   ├── LGPD-E-DADOS-PESSOAIS.md
-│   └── ESCALA-E-CONCORRENCIA.md
+│   ├── ESCALA-E-CONCORRENCIA.md
+│   └── SEGURANCA-PROMPT-INJECTION.md
 ├── 01-contratos-de-dados/
 │   ├── input-sinais-negocio.schema.json
 │   ├── output-manual-marca.schema.json
@@ -66,20 +73,28 @@ export-para-webfy/
 
 ## Como navegar o pacote
 
+- **`00-ORDEM-DE-IMPLEMENTACAO.md`** — antes de implementar qualquer coisa,
+  leia isto. Categoriza todo o pacote em P0 (sem isso não existe produto),
+  P1 (importante antes de escalar, não trava um piloto pequeno) e P2
+  (hardening pra depois do lançamento).
 - **`CHRONOLOGIA.md`** — o documento central. Passo a passo cronológico
   completo, do lead sem site até o manual entregue, com agente/tempo/
   bifurcação lógica-de-logo em cada passo, e um diagrama do fluxo inteiro.
   Comece por aqui pra entender o todo antes de mergulhar nas peças.
 - **`00-arquitetura/`** — como os 10 agentes se orquestram entre si (ordem,
-  paralelismo, gates de qualidade) e como funciona o meta-arquivo de estado
-  por lead (equivalente ao `.agent/state.json` da BNP, mas por negócio em
-  vez de por task de projeto). Também cobre versionamento pós-entrega
-  (`VERSIONAMENTO.md`), métricas do pipeline e o loop de feedback do
-  vendedor (`OBSERVABILIDADE.md`), estratégia de testes de agente
-  (`ESTRATEGIA-DE-TESTES.md`), o tratamento de dado pessoal em reviews de
-  cliente (`LGPD-E-DADOS-PESSOAIS.md`), e o comportamento do pipeline sob
-  volume alto de leads — fila de processamento, corrida entre vendedores no
-  mesmo lead, e throughput de geração de imagem (`ESCALA-E-CONCORRENCIA.md`).
+  paralelismo, gates de qualidade, e a semântica de erro/retry por tipo de
+  falha em `ARQUITETURA-AGENTES.md §6`) e como funciona o meta-arquivo de
+  estado por lead (equivalente ao `.agent/state.json` da BNP, mas por
+  negócio em vez de por task de projeto). Também cobre versionamento
+  pós-entrega (`VERSIONAMENTO.md`), métricas do pipeline e o loop de
+  feedback do vendedor (`OBSERVABILIDADE.md`), estratégia de testes de
+  agente (`ESTRATEGIA-DE-TESTES.md`), o tratamento de dado pessoal em
+  reviews de cliente (`LGPD-E-DADOS-PESSOAIS.md`), o comportamento do
+  pipeline sob volume alto de leads — fila de processamento, corrida entre
+  vendedores no mesmo lead, e throughput de geração de imagem
+  (`ESCALA-E-CONCORRENCIA.md`) — e a defesa em camadas contra texto
+  adversarial vindo dos sinais coletados na web aberta
+  (`SEGURANCA-PROMPT-INJECTION.md`).
 - **`01-contratos-de-dados/`** — os 3 JSON Schemas que definem exatamente o
   que entra (sinais coletados do negócio), o que sai (manual de marca
   gerado) e como o progresso é rastreado (estado de geração por lead,
