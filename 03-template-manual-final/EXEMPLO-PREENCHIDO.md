@@ -83,6 +83,11 @@ usada no Instagram e funciona bem — vamos mantê-la como base:
    data ao redor da borda, reforçando a tradição que já aparece na sua
    descrição do Google.
 
+*Essas 3 opções foram geradas por inteligência artificial — a parte de
+direito autoral sobre esse tipo de imagem ainda está em definição no
+mercado, e vamos te avisar assim que tivermos uma posição jurídica clara
+sobre isso.*
+
 ## Aplicações práticas
 
 **Cartão de visita:** logo no canto superior esquerdo, nome em destaque no

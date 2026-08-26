@@ -151,8 +151,10 @@ etapas.
 - **Bifurcação:**
   - Aprovado (com ou sem ressalvas): segue pro Passo 11.
   - Reprovado: volta pro agente responsável pelo achado (máx. 2 ciclos
-    automáticos); no 3º reprovado, escala pra fila humana em vez de tentar
-    de novo sozinho.
+    automáticos); no 3º reprovado, escala pra fila humana de suporte/
+    operações do próprio webfy — nunca pro vendedor, nunca pra BNP (ver
+    `02-agentes/agent-09-revisor-qualidade.md`) — em vez de tentar de novo
+    sozinho.
 
 ## Passo 11 — Manual disponível na aba do vendedor
 
@@ -245,3 +247,37 @@ etapas.
                      v
     [Passo 13: CRM grava status_entrega, funil ganha marco opcional]
 ```
+
+---
+
+## Passo 14 — Ciclo de vida pós-entrega (o negócio muda de ideia, pede ajuste, ou o sinal do lead muda)
+
+- **O que acontece:** um manual "entregue" não é um documento congelado.
+  Três gatilhos comuns depois do Passo 13:
+  1. O vendedor faz a micro-conversa com o dono do negócio (Passo 9, nota
+     sobre "tensão do fundador") e traz um sinal novo — dispara regeração
+     pontual só daquele módulo.
+  2. O dono pede um ajuste específico já com o manual em mãos (ex: "gostei
+     de tudo, mas a paleta não combina") — mesma coisa, regeração pontual
+     do módulo afetado.
+  3. O sinal de origem do lead muda de forma estrutural — nome do negócio
+     corrigido, categoria reclassificada, negócio mudou de endereço/nicho —
+     o que invalida premissas usadas em vários módulos ao mesmo tempo.
+- **Etapa:** `agent-11-regenerador-modulo` (gatilhos 1 e 2, regeração
+  pontual) ou pipeline completo de novo a partir do agent-01 (gatilho 3,
+  mudança estrutural) — a decisão de qual caminho seguir é regida por
+  `00-arquitetura/VERSIONAMENTO.md`.
+- **Entra:** manual na versão atual (`versao_manual_atual` no estado de
+  geração) + o sinal novo/motivo do ajuste.
+- **Sai:** nova versão do manual (`versao_manual_atual` incrementado),
+  histórico de versões atualizado (`link_historico_versoes`), com o restante
+  do manual preservado sem alteração quando a regeração foi pontual.
+- **Tempo:** regeração pontual, 10-40s (só o módulo + racional + checagem
+  do gate nesse trecho); regeração completa, mesmo tempo do fluxo original
+  (Passos 2-10).
+- **Freio duro:** se o dono do negócio já escolheu e ativou uma das 3
+  alternativas de logo, esse módulo **nunca** é sobrescrito por regeração
+  automática — precisa de confirmação humana explícita separada do
+  disparo padrão, mesmo que o gatilho seja o 3 (mudança estrutural). Ver
+  `00-arquitetura/VERSIONAMENTO.md` e `02-agentes/agent-11-regenerador-
+  modulo.md`.

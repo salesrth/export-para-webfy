@@ -42,6 +42,17 @@ como upsell de troca).
    manual pode sair com `logo.alternativas_geradas` marcado `falhou` e
    seguir pro agent-08 com essa lacuna explícita, nunca travando a entrega
    do resto do manual por causa da imagem.
+6. **Teto de custo, regra dura:** este agente dispara a geração completa das
+   3 opções **no máximo 1 vez por `lead_id`** — a chamada automática do
+   Passo 7 do pipeline (`CHRONOLOGIA.md`). Qualquer geração adicional (ex:
+   botão "Regenerar logo" da UI, ou o agent-11 regenerando só o módulo de
+   logo) exige clique explícito do vendedor. Isso vale também pra retry
+   automático do gate de qualidade (agent-09 reprovado): correção de texto/
+   racional pode reprocessar sozinha, mas religar a geração de imagem por
+   causa de reprovação NÃO é automática — se o achado do gate afeta a
+   imagem em si (não só o racional em volta dela), o ciclo de correção pára
+   e aguarda o clique do vendedor em vez de gastar uma nova chamada de
+   imagem sozinho.
 </execution>
 
 <output_format>
@@ -59,4 +70,14 @@ Array `logo.alternativas_geradas[]` conforme `output-manual-marca.schema.json`
 - As 3 opções são sempre geradas mesmo com logo existente — a decisão de
   se usar ou não é do vendedor/dono do negócio, nunca omitida por este
   agente antecipando que "não vai ser usada".
+- Nunca dispare uma 2ª geração completa (as 3 opções) pro mesmo `lead_id`
+  sem um clique explícito do vendedor registrado — nunca "sozinho de novo",
+  nem por retry, nem por regeração de outro módulo que incidentalmente
+  toque logo.
+- **[PENDENTE-JURIDICO]** Titularidade dos direitos autorais sobre um logo
+  gerado por IA ainda não foi resolvida juridicamente (pendência formal,
+  precisa de advogado antes do lançamento). Este agente nunca deve afirmar
+  ou implicar no brief, no racional ou em qualquer texto que acompanha as
+  3 opções que o direito autoral pertence automaticamente ao dono do
+  negócio — trate a questão como em aberto, não como resolvida.
 </constraints>

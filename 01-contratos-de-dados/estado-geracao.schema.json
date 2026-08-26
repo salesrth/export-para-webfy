@@ -61,7 +61,33 @@
       "enum": ["nao_enviado", "link_gerado", "pdf_exportado", "enviado_pelo_vendedor", "visualizado_pelo_dono"],
       "description": "Rastreado separado do estágio do pipeline — um manual 'pronto' pode ficar 'nao_enviado' por tempo indefinido até o vendedor agir."
     },
-    "link_publico": { "type": ["string", "null"], "format": "uri" },
+    "link_publico": {
+      "type": ["string", "null"],
+      "format": "uri",
+      "description": "URL compartilhável do manual. Protegida por PIN desde que o link é gerado — a página não renderiza conteúdo sem o `pin_acesso` correto (ver 04-integracao-webfy/ESPECIFICACAO-ABA-UI.md § Acesso por PIN)."
+    },
+    "pin_acesso": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9]{6}$",
+      "description": "PIN numérico de 6 dígitos gerado junto com `link_publico`. O vendedor entrega o PIN ao dono do negócio pelo mesmo canal do link (não é conta de usuário, é fricção mínima). Null até a primeira geração de link."
+    },
+    "pin_gerado_em": { "type": ["string", "null"], "format": "date-time" },
+    "pin_tentativas_falhas": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0,
+      "description": "Zera a cada acesso correto ou a cada reset de PIN pelo vendedor. Ao atingir o teto configurado (recomendação: 5 — ver ESPECIFICACAO-ABA-UI.md), `pin_bloqueado` vira true."
+    },
+    "pin_bloqueado": {
+      "type": "boolean",
+      "default": false,
+      "description": "true quando `pin_tentativas_falhas` atingiu o teto — o link público para de aceitar tentativas até o vendedor gerar um novo PIN."
+    },
+    "link_historico_versoes": {
+      "type": ["string", "null"],
+      "format": "uri",
+      "description": "Ponteiro pra tela/endpoint que lista as versões anteriores do manual (v1, v2, ...) pro vendedor consultar. Ver 00-arquitetura/VERSIONAMENTO.md. Null enquanto só existir a versão 1."
+    },
     "historico_estagios": {
       "type": "array",
       "description": "Trilha de auditoria simples — um registro por transição de estágio.",

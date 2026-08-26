@@ -40,7 +40,9 @@ FASE 4 — GATE (sequencial, bloqueia entrega)
        ├─ aprovado / aprovado_com_ressalvas → estágio "pronto"
        └─ reprovado → volta pro agente responsável pelo achado, no máximo
                        2 ciclos automáticos; 3º reprovado escala pra fila
-                       humana (vendedor ou revisor BNP-side, config do webfy)
+                       humana de suporte/operações do próprio webfy — nunca
+                       pro vendedor, nunca pra BNP (ver agent-09-revisor-
+                       qualidade.md)
 ```
 
 ## 2. Por que essa ordem

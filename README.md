@@ -24,6 +24,45 @@ Dev do webfy que vai implementar a feature, ou uma sessão de IA de
 desenvolvimento trabalhando dentro do repo do webfy com acesso ao stack
 real da plataforma.
 
+## Estrutura do pacote
+
+```
+export-para-webfy/
+├── README.md
+├── CHRONOLOGIA.md
+├── 00-arquitetura/
+│   ├── ARQUITETURA-AGENTES.md
+│   ├── META-ARQUIVOS.md
+│   ├── VERSIONAMENTO.md
+│   ├── OBSERVABILIDADE.md
+│   ├── ESTRATEGIA-DE-TESTES.md
+│   └── LGPD-E-DADOS-PESSOAIS.md
+├── 01-contratos-de-dados/
+│   ├── input-sinais-negocio.schema.json
+│   ├── output-manual-marca.schema.json
+│   └── estado-geracao.schema.json
+├── 02-agentes/
+│   ├── agent-01-ingestor-sinais.md
+│   ├── agent-02-descoberta-automatica.md
+│   ├── agent-03-posicionamento.md
+│   ├── agent-04-sistema-cor.md
+│   ├── agent-05-tipografia-e-composicao.md
+│   ├── agent-06-logo-guardiao.md
+│   ├── agent-07-logo-alternativas.md
+│   ├── agent-08-compositor-manual.md
+│   ├── agent-09-revisor-qualidade.md
+│   ├── agent-10-explicador-didatico.md
+│   └── agent-11-regenerador-modulo.md
+├── 03-template-manual-final/
+│   ├── ESTRUTURA-MANUAL.md
+│   ├── EXEMPLO-PREENCHIDO.md
+│   └── ACESSIBILIDADE.md
+└── 04-integracao-webfy/
+    ├── ESPECIFICACAO-ABA-UI.md
+    ├── INTEGRACAO-CRM.md
+    └── SERVICO-GERACAO-DE-IMAGEM.md
+```
+
 ## Como navegar o pacote
 
 - **`CHRONOLOGIA.md`** — o documento central. Passo a passo cronológico
@@ -33,24 +72,31 @@ real da plataforma.
 - **`00-arquitetura/`** — como os 10 agentes se orquestram entre si (ordem,
   paralelismo, gates de qualidade) e como funciona o meta-arquivo de estado
   por lead (equivalente ao `.agent/state.json` da BNP, mas por negócio em
-  vez de por task de projeto).
+  vez de por task de projeto). Também cobre versionamento pós-entrega
+  (`VERSIONAMENTO.md`), métricas do pipeline (`OBSERVABILIDADE.md`),
+  estratégia de testes de agente (`ESTRATEGIA-DE-TESTES.md`) e o tratamento
+  de dado pessoal em reviews de cliente (`LGPD-E-DADOS-PESSOAIS.md`).
 - **`01-contratos-de-dados/`** — os 3 JSON Schemas que definem exatamente o
   que entra (sinais coletados do negócio), o que sai (manual de marca
-  gerado) e como o progresso é rastreado (estado de geração por lead).
-- **`02-agentes/`** — os 10 prompts de agente, um arquivo por agente, no
+  gerado) e como o progresso é rastreado (estado de geração por lead,
+  incluindo o PIN de acesso ao link público e o histórico de versões).
+- **`02-agentes/`** — os 11 prompts de agente, um arquivo por agente, no
   formato exato do padrão `.claude/agents/*.md` da BNP (frontmatter +
   tags `<role>`/`<execution>`/`<output_format>`/`<constraints>`). Cobrem
-  desde a ingestão de sinais até o gate final de qualidade — com atenção
-  especial aos agentes 06 e 07, que resolvem a lógica central de "o negócio
-  já tem logo ou não".
+  desde a ingestão de sinais até o gate final de qualidade e a regeração
+  pontual de módulo (agent-11) — com atenção especial aos agentes 06 e 07,
+  que resolvem a lógica central de "o negócio já tem logo ou não".
 - **`03-template-manual-final/`** — a estrutura de seções do documento
-  final entregue ao dono do negócio, mais um exemplo completo e fictício
+  final entregue ao dono do negócio, um exemplo completo e fictício
   (uma padaria com logo simples já existente) que serve de referência de
-  tom e qualidade.
+  tom e qualidade, e os requisitos de acessibilidade (`ACESSIBILIDADE.md`)
+  que valem pra página web e pro PDF exportado.
 - **`04-integracao-webfy/`** — as 3 pontas que conectam o pipeline à
-  plataforma real: a especificação de UX da aba nova, quando/como o CRM
-  registra a geração, e a interface pluggable pro serviço externo de
-  geração de imagem (sem cravar qual API usar).
+  plataforma real: a especificação de UX da aba nova (incluindo o fluxo de
+  PIN de acesso ao link público), quando/como o CRM registra a geração, e a
+  interface pluggable pro serviço externo de geração de imagem (sem cravar
+  qual API usar, mas já com o teto de custo por lead e a pendência jurídica
+  de direitos autorais).
 
 ## Decisões que este pacote NÃO re-decide
 

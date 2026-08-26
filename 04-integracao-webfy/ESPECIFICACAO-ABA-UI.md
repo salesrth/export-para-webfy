@@ -46,9 +46,19 @@ Nome sugerido da aba: **"Manual de marca"**, ao lado de abas existentes tipo
 - Botões:
   - **Exportar PDF** — gera o PDF do conteúdo atual da tela.
   - **Copiar link público** — copia a URL compartilhável (só ativa depois
-    da primeira geração bem-sucedida).
+    da primeira geração bem-sucedida). Na primeira vez que este botão é
+    usado, gera também o PIN de acesso (ver §5) — o link sozinho não abre
+    o manual.
+  - **Ver PIN de acesso** — mostra o PIN atual de 6 dígitos pro vendedor
+    copiar/repassar junto com o link (ver §5). Sempre visível pro vendedor,
+    nunca escondido dele — só o dono do negócio final não vê o PIN em
+    lugar nenhum da UI pública, só recebe pelo vendedor.
   - **Regenerar logo** — dispara só o agent-07 de novo (não o pipeline
-    inteiro), útil se o vendedor/dono não gostou das 3 opções.
+    inteiro), útil se o vendedor/dono não gostou das 3 opções. **Este botão
+    é a única forma de disparar uma nova geração completa de logo depois da
+    primeira** — o pipeline nunca gera de novo sozinho (teto de custo, ver
+    `SERVICO-GERACAO-DE-IMAGEM.md §6`). Clicar aqui é o "clique explícito
+    do vendedor" que a regra exige.
   - **Marcar como enviado** — grava `status_entrega=enviado_pelo_vendedor`
     e atualiza o CRM (ver `INTEGRACAO-CRM.md`).
 
@@ -81,3 +91,37 @@ Nunca a UI deve apresentar um módulo com confiança `baixo`/`ausente` como
 se fosse informação certa. Toda lacuna aparece marcada visualmente (ex:
 ícone de alerta discreto, não vermelho de erro — é uma lacuna esperada do
 processo automático, não uma falha).
+
+## 5. Acesso por PIN ao link público
+
+O link público não é mais um link direto sem proteção — a página pede um
+PIN antes de renderizar qualquer conteúdo do manual. Não é um sistema de
+contas completo, é fricção mínima: sem cadastro, sem senha reutilizável,
+sem email de verificação.
+
+- **Geração:** o PIN é criado junto com o link, na primeira vez que o
+  vendedor clica "Copiar link público" (`estado_geracao.pin_acesso`, 6
+  dígitos numéricos). Um `lead_id` tem sempre 1 PIN ativo por vez.
+- **Entrega:** o vendedor repassa o PIN ao dono do negócio pelo mesmo canal
+  que usar pra mandar o link (WhatsApp, email) — a UI mostra o PIN atual
+  pro vendedor a qualquer momento via "Ver PIN de acesso" (§2.3).
+- **Tela de acesso:** ao abrir o link público, o visitante vê só um campo
+  de PIN + botão "Acessar manual". Nenhum conteúdo do manual é enviado ao
+  navegador antes da validação — o PIN errado não deve nem revelar se o
+  link é válido além do próprio erro genérico.
+- **Tentativas:** recomendação de teto **5 tentativas erradas consecutivas**
+  antes de bloquear (`estado_geracao.pin_bloqueado=true`). Bloqueio é por
+  link/lead, não por IP — evita que um visitante legítimo com PIN certo
+  fique travado por causa de tentativas erradas de outra pessoa, mas também
+  não deveria ser tão frouxo a ponto de permitir força bruta de 6 dígitos
+  (recomendação: rate-limit adicional por IP como camada extra, decisão de
+  implementação do webfy).
+- **Reenvio/reset:** o vendedor pode gerar um novo PIN a qualquer momento
+  (ação "Gerar novo PIN", disponível mesmo sem estar bloqueado) — isso
+  invalida o PIN anterior, zera `pin_tentativas_falhas` e limpa
+  `pin_bloqueado`. É o fluxo padrão tanto pra bloqueio quanto pra "dono do
+  negócio esqueceu o PIN": o vendedor não reenvia o PIN antigo, gera um
+  novo e reenvia esse.
+- **Escopo do PIN:** protege o link público (visão do dono do negócio fora
+  do CRM). Não afeta a aba dentro do CRM do webfy, que já tem seu próprio
+  controle de acesso de vendedor/conta.

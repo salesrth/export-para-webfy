@@ -64,6 +64,16 @@ nunca "use esta cor" sem contexto.
 - Espaço claro pra indicar "qual dessas você prefere" (campo de decisão que
   a aba UI captura — ver `04-integracao-webfy/ESPECIFICACAO-ABA-UI.md`).
 
+**Em ambos os casos, nota obrigatória junto das 3 opções geradas:**
+**[PENDENTE-JURIDICO]** a titularidade dos direitos autorais sobre um logo
+gerado por IA ainda está em análise jurídica — o manual não deve afirmar
+que o direito autoral pertence automaticamente ao dono do negócio até essa
+definição estar fechada (ver `04-integracao-webfy/SERVICO-GERACAO-DE-
+IMAGEM.md §7`). Linguagem sugerida pro dono do negócio, sem alarmar:
+"esse logo foi gerado por inteligência artificial — a parte de direito
+autoral sobre esse tipo de imagem ainda está em definição no mercado, e
+vamos te avisar assim que tivermos uma posição clara sobre isso."
+
 ## 6. Aplicações práticas
 
 Uma subseção por contexto relevante à categoria do negócio, cada uma com

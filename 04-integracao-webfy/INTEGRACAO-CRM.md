@@ -48,6 +48,11 @@ processamento em leads que nunca serão trabalhados.
   dono antes de enviar.
 - **Link público e status de PDF exportado** — pra evitar regenerar/reenviar
   à toa.
+- **PIN de acesso atual** (`pin_acesso`) — visível pro vendedor junto do
+  link, pra ele repassar ao dono do negócio pelo mesmo canal (ver
+  `ESPECIFICACAO-ABA-UI.md §5`). Se `pin_bloqueado=true`, o card mostra
+  aviso e a ação "Gerar novo PIN" fica em destaque — um manual pronto mas
+  com PIN bloqueado não deveria passar despercebido pelo vendedor.
 - **`status_entrega`** — alimenta o funil (ver §3).
 
 ## 3. Novo status de funil sugerido

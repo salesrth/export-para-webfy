@@ -86,3 +86,41 @@ Critério de decisão sugerido pro webfy: custo por imagem em volume (o
 pipeline roda pra cada lead capturado, potencialmente milhares/mês),
 qualidade de tipografia embutida na imagem, e se entrega formato vetorial
 nativo (reduz trabalho de pós-processamento).
+
+## 6. Teto de custo — regra dura
+
+**No máximo 1 geração automática completa (as 3 opções de logo) por
+`lead_id`.** É a chamada que sai do Passo 7 do pipeline
+(`CHRONOLOGIA.md`), disparada uma única vez por lead. Qualquer geração
+adicional — regenerar as 3 de novo, regenerar só 1 opção, ou reprocessar
+por causa de reprovação do gate de qualidade — **exige clique explícito do
+vendedor** (botão "Regenerar logo" na UI, `04-integracao-webfy/
+ESPECIFICACAO-ABA-UI.md §2.3`, ou o agent-11 disparado por ação humana). O
+serviço de geração de imagem nunca deve aceitar uma segunda chamada
+automática pro mesmo `lead_id` sem esse sinal de clique explícito no
+request — implementações devem validar isso no nível da interface, não só
+confiar que o agent-07 vai respeitar a regra sozinho (defesa em
+profundidade contra custo de API rodando sem controle em escala).
+
+## 7. [PENDENTE-JURIDICO] Direitos autorais do logo gerado por IA
+
+A titularidade dos direitos autorais sobre um logo gerado por modelo de IA
+generativa **não está resolvida juridicamente** neste blueprint — é uma
+pendência formal que precisa de análise de advogado antes do lançamento da
+feature. Isso afeta pelo menos três pontos:
+
+- Se o dono do negócio pode reivindicar uso comercial exclusivo do logo
+  gerado (registro de marca, por exemplo) sem risco de contestação sobre a
+  autoria da geração.
+- Se o webfy, o provedor de IA usado, ou terceiros retêm algum direito
+  sobre a imagem gerada, dependendo dos termos de uso da API escolhida
+  (candidatos listados em §5) — cada provedor tem cláusulas diferentes de
+  propriedade sobre output gerado, que precisam ser revisadas uma a uma.
+- Se há elemento derivativo problemático no output do modelo (ex:
+  similaridade não intencional com marca registrada de terceiro — ver
+  também `00-arquitetura/ESTRATEGIA-DE-TESTES.md` pro caso de teste
+  correspondente).
+
+Até essa análise jurídica ser concluída, nenhum agente, texto de UI ou
+material do manual deve afirmar ou implicar que o direito autoral do logo
+gerado pertence automaticamente e sem ressalva ao dono do negócio.
